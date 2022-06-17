@@ -13,11 +13,9 @@ public class GameOver : MonoBehaviour
     [SerializeField] private Button _restartButton;
 
     private CanvasGroup _gameOverGroup;
-    private Animator _animator;
 
     private void Start()
     {
-        _animator = _player.GetComponent<Animator>();
         _gameOverGroup = GetComponent<CanvasGroup>();
         _gameOverGroup.alpha = 0;
     }
@@ -25,24 +23,23 @@ public class GameOver : MonoBehaviour
     private void OnEnable()
     {
         _player.Died += OnGameOvered;
-        _restartButton.onClick.AddListener(OnRestartButtonClick);
     }
 
     private void OnDisable()
     {
         _player.Died -= OnGameOvered;
-        _restartButton.onClick.RemoveListener(OnRestartButtonClick);
     }
     
     private void OnGameOvered()
     {
-        _animator.SetBool("Died", true);
+        _restartButton.onClick.AddListener(OnRestartButtonClick);
         _gameOverGroup.alpha = 1;
         Time.timeScale = 0;
     }
 
     private void OnRestartButtonClick()
     {
+        _restartButton.onClick.RemoveListener(OnRestartButtonClick);
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
